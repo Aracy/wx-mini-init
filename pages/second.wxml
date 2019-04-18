@@ -1,0 +1,5 @@
+<!--pages/second.wxml-->
+
+<view>上一页传递给我的数字是{{transNum}}</view>
+
+<button catchtap='onResultTap'>减一传回去</button>

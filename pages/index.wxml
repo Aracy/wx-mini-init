@@ -1,0 +1,4 @@
+<!--pages/index.wxml-->
+
+
+<button catchtap='onNextTap'>下一页</button>
