@@ -1,9 +1,3 @@
-const LoadState = {
-    loading: 0, //加载中
-    loadFail: 1, //加载成功
-    loadSuccess: 2 //加载失败
-}
-
 /**
  * 封装网络请求
  * 
@@ -51,11 +45,7 @@ function netWork(url, data, method, header, context) {
  */
 function https(url, data = {}, method = 'GET', header = {}) {
     return new Promise((resolve, reject) => {
-        if (this.noteLoadState) {
-            this.setData({
-                loadState: LoadState.loading
-            })
-        }
+
         netWork(url, data, method, header, this).then(res => {
             //超时情况，重新微信登录
             if (res.statusCode == 401 || res.statusCode == 403) {
@@ -63,20 +53,12 @@ function https(url, data = {}, method = 'GET', header = {}) {
             }
             //正常返回
             if (res.statusCode == 200) {
-                if (this.noteLoadState) {
-                    this.setData({
-                        loadState: LoadState.loadSuccess
-                    })
-                }
                 resolve(res)
-            }
-            if (this.noteLoadState) {
-                this.setData({
-                    loadState: LoadState.loadFail
-                })
+                return Promise.reject(0)
             }
             //其他情况
             reject(res)
+            return Promise.reject(0)
         }).then(res => {
             return getApp().https(getApp().api.accountWxLogin, {
                 code: res.code
@@ -98,10 +80,8 @@ function https(url, data = {}, method = 'GET', header = {}) {
             }
             reject(res)
         }).catch(res => {
-            if (this.noteLoadState) {
-                this.setData({
-                    loadState: LoadState.loadFail
-                })
+            if (res == 0) {
+                return
             }
             reject(res)
         })

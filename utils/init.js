@@ -11,6 +11,9 @@ Promise.prototype.finally = function(callback) {
 
 
 
+/***
+ * 将一般微信API转换为Promise形式
+ */
 var toPromise = fn => {
     return function(obj = {}) {
         return new Promise((resolve, reject) => {
@@ -30,7 +33,7 @@ var toPromise = fn => {
 
 
 import httpsModule from './https.js'
-
+import apiModule from './api.js'
 
 
 //通用配置
@@ -58,10 +61,15 @@ const pageConfig = {
     }
 }
 
+const appConfig = {
+    ...generalConfig,
+    api: apiModule
+}
+
 
 const originalApp = App;
 App = function(config) {
-    return originalApp(Object.assign(config, generalConfig))
+    return originalApp(Object.assign(config, appConfig))
 }
 
 const originalPage = Page
