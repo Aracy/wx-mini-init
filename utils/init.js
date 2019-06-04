@@ -48,6 +48,8 @@ var toPromise = fn => {
 import apiModule from './api.js'
 import httpsModule from './https.js'
 
+require('./stateManage.js')
+
 
 
 //通用配置
@@ -147,6 +149,7 @@ Page = function(config) {
         if (typeof onLoad === 'function') {
             onLoad.call(this, options)
         }
+        //获取上一个页面的对象引用
         const pages = getCurrentPages();
         this.prevPage = pages.length > 1 ? pages[pages.length - 2] : undefined
         if (this.prevPage && this.prevPage.nextParam) {
